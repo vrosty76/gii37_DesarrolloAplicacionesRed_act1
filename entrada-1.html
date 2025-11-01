@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Creación de un blog web utilizando Gatsby</title>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="global-wrapper">
+
+    <header class="global-header">
+      <h1><a>Blog de Kbilbao sobre la actividad 1</a></h1>
+    </header>
+
+    <nav class="main-nav">
+      <a href="entrada-2.html">Entrada 2: Creación del estilo final</a>
+      <a href="entrada-3.html">Entrada 3: Gestión de Imágenes (Lightbox)</a>
+      <a href="entrada-4.html">Entrada 4: Despliegue mediante imagen de podman</a>
+    </nav>
+
+    <main>
+      <article class="blog-post">
+
+        <header>
+          <h1>Creación de un blog web utilizando Gatsby</h1>
+          <p>30 de octubre de 2025</p>
+        </header>
+
+        <hr>
+
+        <section>
+          
+          <h2>Qué es Gatsby</h2>
+          <p>
+            Gatsby is a React-based open source framework for creating websites.
+            (Fuente: <a href="https://www.gatsbyjs.com/docs/" target="_blank" rel="noopener noreferrer">Gatsby Docs</a>)
+          </p>
+
+          <h2>Proceso de Creación del Blog</h2>
+          <p>Para crear este blog, he seguido varios pasos, empezando por la configuración del entorno de desarrollo y resolviendo algunos problemas comunes que surgieron en la terminal.</p>
+
+          <h3>1. Actualizar el Entorno (Node.js y NPM)</h3>
+          <p>Antes de instalar Gatsby, es crucial tener una versión moderna de Node.js. En mi caso, usando WSL (RHEL-10-prebuilt), tuve que seleccionar la versión LTS (Iron) usando <code>nvm</code>:</p>
+          
+          <pre><code>[root@peio kbilbao]# nvm install lts/iron
+Now using node v20.19.5 (npm v10.8.2)
+
+[root@peio kbilbao]# node -v
+v20.19.5</code></pre>
+          
+          <p>También actualicé <code>npm</code> a una versión específica para asegurar la compatibilidad de las dependencias:</p>
+          
+          <pre><code>[root@peio kbilbao]# npm install -g npm@11.6.2
+removed 18 packages, and changed 117 packages in 3s</code></pre>
+
+          <h3>2. El Error: ¡Faltaba Git!</h3>
+          <p>Al intentar crear el sitio con el iniciador interactivo <code>npm init gatsby</code>, el proceso falló. Gatsby necesita <strong>Git</strong> para clonar las plantillas ("starters") desde repositorios de GitHub.</p>
+          <p>Este fue el error exacto:</p>
+
+          <pre><code>[root@peio gatsby]# npm init gatsby
+...
+What would you like to call your site?
+✔ · KBilbaoBlogSite
+...
+✔ Shall we do this? (Y/n) · Yes
+Command failed with EACCES: git clone https://github.com/gatsbyjs/gatsby-starter-minimal.git ...
+spawn git EACCES
+npm error code 1</code></pre>
+
+          <h3>3. Solución: Instalar Git</h3>
+          <p>La solución fue sencilla: instalar <code>git</code> en mi distribución de Fedora (RHEL) usando el gestor de paquetes <code>dnf</code>:</p>
+
+          <pre><code>[root@peio gatsby]# sudo dnf install git
+Updating Subscription Management repositories.
+...
+Complete!</code></pre>
+
+          <h3>4. Creación Exitosa</h3>
+          <p>Con <code>git</code> ya disponible, volví a ejecutar el comando <code>npm init gatsby</code>. Esta vez, el proceso se completó sin problemas, creando la estructura del blog:</p>
+
+          <pre><code>[root@peio gatsby]# npm init gatsby
+...
+🎉  Your new Gatsby site kbilbao-blog has been successfully created
+at /mnt/c/Users/kbilbao/gatsby/kbilbao-blog.
+
+Start by going to the directory with
+
+  cd kbilbao-blog
+
+Start the local development server with
+
+  gatsby develop</code></pre>
+          
+          <p>¡Y con esto, el blog base estaba listo para empezar a añadir contenido y lanzarlo con <code>npm run develop</code>!</p>
+
+        </section>
+
+      </article>
+    </main>
+
+    <footer>
+      © 2025, Construido con Gatsby - Modificado en VsCode + Live Server
+    </footer>
+
+  </div> </body>
+</html>

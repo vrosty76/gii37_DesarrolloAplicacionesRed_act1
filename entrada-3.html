@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Añadiendo JavaScript: Lightbox de Imágenes</title>
+  <link rel="stylesheet" href="style.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="global-wrapper">
+
+    <header class="global-header">
+      <h1><a>Blog de Kbilbao sobre la actividad 1</a></h1>
+    </header>
+
+    <nav class="main-nav">
+      <a href="entrada-1.html">Entrada 1: Creación con Gatsby</a>
+      <a href="entrada-2.html">Entrada 2: Evolución de Estilos CSS</a>
+      <a href="entrada-4.html">Entrada 4: Despliegue mediante imagen de podman</a>
+    </nav>
+
+    <main>
+      <article class="blog-post">
+
+        <header>
+          <h1>Añadiendo JavaScript: Gestión de Imágenes (Lightbox)</h1>
+          <p>2 de noviembre de 2025</p>
+        </header>
+
+        <hr>
+
+        <section>
+          
+          <p>Para cumplir con los requisitos de la actividad, el profesor solicitó añadir interactividad con **JavaScript**, específicamente para la gestión de imágenes.</p>
+          <p>Hemos implementado una funcionalidad clásica y elegante conocida como **"Lightbox"**. En lugar de simplemente mostrar una imagen, ahora podemos hacer clic en ella para que se amplíe y ocupe el centro de la pantalla, mientras un fondo oscuro desvanece el resto del contenido.</p>
+
+          <h2>¿Cómo se ha implementado?</h2>
+          <p>
+            La implementación ha requerido tocar nuestros tres tipos de archivos:
+          </p>
+          
+          <ol>
+            <li><strong>`lightbox.js` (Nuevo):</strong> Se creó un nuevo archivo JavaScript. Este script espera a que la página cargue, busca todas las imágenes (`<img>`) dentro de los artículos (`.blog-post`) y les añade un "escuchador" de eventos (un <code>addEventListener</code>). Al hacer clic, el script activa el modal.</li>
+            <li><strong>`style.css` (Modificado):</strong> Añadimos nuevos estilos al final del CSS para definir el aspecto del modal (<code>#lightbox</code>). Por defecto, está oculto (<code>display: none;</code>), y el JavaScript lo hace visible (<code>display: flex;</code>) al añadir la clase <code>.visible</code>.</li>
+            <li><strong>Todos los `.html` (Modificados):</strong> Todas las entradas, incluida esta, ahora enlazan al script justo antes de cerrar el <code>&lt;/body&gt;</code>, usando la etiqueta <code>&lt;script src="lightbox.js" defer&gt;&lt;/script&gt;</code>.</li>
+          </ol>
+
+          <h2>Demostración</h2>
+          <p>
+            ¡Pruébalo tú mismo! La siguiente imagen (`javascript.jpg`) ha sido detectada por nuestro script. 
+          </p>
+          <p>
+            Haz clic en ella para ver el efecto Lightbox en acción. Puedes cerrarlo volviendo a hacer clic en cualquier parte del fondo oscuro.
+          </p>
+
+          <img src="javascript.jpg" alt="Demostración del Lightbox con logo de JavaScript" style="max-width: 400px; display: block; margin: 1.5rem auto; border: 1px solid #ddd;">
+          
+
+        </section>
+
+      </article>
+    </main>
+
+    <footer>
+      © 2025, Construido con Gatsby - Modificado en VsCode + Live Server
+    </footer>
+
+  </div> 
+  
+  <script src="lightbox.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Evolución de Estilos CSS del Blog</title>
+  <link rel="stylesheet" href="style.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="global-wrapper">
+
+    <header class="global-header">
+      <h1><a>Blog de Kbilbao sobre la actividad 1</a></h1>
+    </header>
+
+    <nav class="main-nav">
+      <a href="entrada-1.html">Entrada 1: Creación con Gatsby</a>
+      <a href="entrada-3.html">Entrada 3: Gestión de Imágenes (Lightbox)</a>
+      <a href="entrada-4.html">Entrada 4: Despliegue mediante imagen de podman</a>
+
+    </nav>
+
+    <main>
+      <article class="blog-post">
+
+        <header>
+          <h1>Evolución de Estilos: De la Base al Diseño Final</h1>
+          <p>31 de octubre de 2025</p>
+        </header>
+
+        <hr>
+
+        <section>
+          
+          <p>En la primera entrada, configuramos la estructura del blog. En esta, vamos a documentar cómo evolucionó nuestra hoja de estilos <code>style.css</code>.</p>
+          <p>Partimos de un **CSS base, sencillo y elegante**, enfocado puramente en la legibilidad, y luego añadimos tres capas de personalización para darle identidad al blog.</p>
+
+          <h2>1. El Punto de Partida: CSS Base</h2>
+          <p>
+            El objetivo inicial era tener una lectura cómoda. Esto se logró con:
+          </p>
+          <ul>
+            <li>Una fuente <code>serif</code> (como 'Georgia') para el cuerpo del texto (<code>.blog-post</code>), que es más cómoda para lecturas largas.</li>
+            <li>Una fuente <code>sans-serif</code> (como 'Helvetica' o 'Roboto') para los títulos (<code>h1, h2</code>), que ofrece un contraste limpio.</li>
+            <li>Un contenedor (<code>.global-wrapper</code>) con un ancho máximo (<code>max-width: 800px</code>) para centrar el contenido y evitar líneas de texto demasiado largas.</li>
+          </ul>
+          
+          <p>El código CSS base era funcional, pero visualmente muy simple:</p>
+
+<pre><code>body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #fdfdfd;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+.global-wrapper {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.blog-post {
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+  font-size: 1.1rem;
+}
+
+h1, h2, h3 {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #111;
+}
+
+a {
+  color: #007acc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 2rem 0;
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #888;
+}</code></pre>
+
+          <h2>2. Modificación: El Encabezado "Knockout"</h2>
+          <p>
+            Para darle personalidad, modificamos el encabezado (<code>.global-header</code>). En lugar de un simple texto, aplicamos un efecto "knockout" (texto calado):
+          </p>
+          <ol>
+            <li>Se dio al header un fondo gris sólido (<code>#e0e0e0</code>) y un borde.</li>
+            <li>Al enlace <code>h1 a</code> dentro del header, le asignamos como "fondo" el color del <code>body</code> (<code>#fdfdfd</code>).</li>
+            <li>Usamos <code>background-clip: text</code> para recortar ese fondo con la forma exacta de las letras.</li>
+            <li>Finalmente, pusimos <code>color: transparent</code>. Esto hace que las letras sean transparentes, revelando el fondo (color body) que recortamos, creando la ilusión de que el texto está "calado" sobre el fondo gris.</li>
+          </ol>
+
+<pre><code>/* ESTILOS DEL HEADER MODIFICADOS */
+.global-header {
+  /* 1. El relleno gris (sólido) */
+  background-color: #e0e0e0; /* Un gris medio */
+
+  /* 2. El rectángulo (borde + padding + esquinas) */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.global-header h1 {
+  margin: 0;
+}
+
+/* 3. LA MAGIA: LETRAS TRANSPARENTES (KNOCKOUT) */
+.global-header h1 a {
+  /* Le decimos al enlace que su "fondo"
+    sea el mismo que el del body (el blanco/gris claro)
+  */
+  background-color: #888; 
+  
+  /* Recortamos ese fondo con la forma exacta del texto */
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Hacemos que el color de la letra sea transparente,
+    revelando el "fondo recortado" que acabamos de poner.
+  */
+  color: transparent;
+  
+  /* Quitamos el subrayado */
+  text-decoration: none;
+}</code></pre>
+
+          <h2>3. Modificación: Barra de Navegación</h2>
+          <p>
+            Añadimos una barra de navegación (<code>.main-nav</code>) simple para separar los enlaces de las entradas. Le dimos un fondo gris muy claro (<code>#f4f4f4</code>) y un borde inferior para separarla visualmente del contenido principal.
+          </p>
+          <p>Hicimos que los enlaces fueran <code>display: block</code> para que cada uno ocupe su propia línea, facilitando la navegación.</p>
+
+<pre><code>/* 2. ESTILOS DE NAVEGACIÓN */
+.main-nav {
+  background-color: #f4f4f4;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.main-nav a {
+  display: block; /* Pongo cada enlace en su propia línea */
+  padding: 0 1rem;
+  font-weight: 500;
+}</code></pre>
+
+
+          <h2>4. Adición Final: Estilos para Código</h2>
+          <p>
+            Siendo un blog técnico, era crucial que los fragmentos de código fueran legibles. Añadimos dos estilos (inspirados en la Entrada 1):
+          </p>
+          <ul>
+            <li><strong>Código en línea (<code>&lt;code&gt;</code>):</strong> Usando <code>:not(pre) > code</code>, le dimos un fondo gris claro y un color rosado (<code>#c7254e</code>) para resaltarlo dentro de los párrafos.</li>
+            <li><strong>Bloques de código (<code>&lt;pre&gt;</code>):</strong> Adoptamos un tema oscuro (estilo "Monokai") con fondo <code>#272822</code> y texto claro, que es muy popular para la lectura de código.</li>
+          </ul>
+
+<pre><code>/* 3. ESTILOS PARA CÓDIGO (¡NUEVO!) */
+
+/* Para código en línea (ej: `npm install`) */
+:not(pre) > code {
+  font-family: Consolas, 'Courier New', monospace;
+  background-color: #f3f4f6; /* Un gris muy claro */
+  color: #c7254e; /* Un tono rosado/rojo para código */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Para bloques de código (logs, comandos multi-línea) */
+pre {
+  background-color: #272822; /* Un fondo oscuro (estilo Monokai) */
+  color: #f8f8f2; /* Texto claro */
+  font-family: Consolas, 'Courier New', monospace;
+  padding: 1.2rem;
+  border-radius: 8px;
+  overflow-x: auto; /* Importante para líneas largas */
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Reseteo para el 'code' dentro de 'pre' */
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+}</code></pre>
+
+          <h2>Resultado Final</h2>
+          <p>Con estas modificaciones sobre la base elegante inicial, conseguimos un blog funcional, con una identidad visual clara y una excelente legibilidad para el contenido técnico. ¡Este es el <code>style.css</code> que usamos actualmente!</p>
+
+        </section>
+
+      </article>
+    </main>
+
+    <footer>
+      © 2025, Construido con Gatsby - Modificado en VsCode + Live Server
+    </footer>
+
+  </div> 
+</body>
+</html>
