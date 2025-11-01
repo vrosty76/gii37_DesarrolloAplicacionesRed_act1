@@ -32,7 +32,7 @@
 
         <section>
           
-          <p>Para cumplir con los requisitos de la actividad, el profesor solicitó añadir interactividad con **JavaScript**, específicamente para la gestión de imágenes.</p>
+          <p>Para cumplir con los requisitos de la actividad, el profesor solicitó en clase añadir interactividad con **JavaScript**, específicamente para la gestión de imágenes.</p>
           <p>Hemos implementado una funcionalidad clásica y elegante conocida como **"Lightbox"**. En lugar de simplemente mostrar una imagen, ahora podemos hacer clic en ella para que se amplíe y ocupe el centro de la pantalla, mientras un fondo oscuro desvanece el resto del contenido.</p>
 
           <h2>¿Cómo se ha implementado?</h2>
@@ -43,7 +43,7 @@
           <ol>
             <li><strong>`lightbox.js` (Nuevo):</strong> Se creó un nuevo archivo JavaScript. Este script espera a que la página cargue, busca todas las imágenes (`<img>`) dentro de los artículos (`.blog-post`) y les añade un "escuchador" de eventos (un <code>addEventListener</code>). Al hacer clic, el script activa el modal.</li>
             <li><strong>`style.css` (Modificado):</strong> Añadimos nuevos estilos al final del CSS para definir el aspecto del modal (<code>#lightbox</code>). Por defecto, está oculto (<code>display: none;</code>), y el JavaScript lo hace visible (<code>display: flex;</code>) al añadir la clase <code>.visible</code>.</li>
-            <li><strong>Todos los `.html` (Modificados):</strong> Todas las entradas, incluida esta, ahora enlazan al script justo antes de cerrar el <code>&lt;/body&gt;</code>, usando la etiqueta <code>&lt;script src="lightbox.js" defer&gt;&lt;/script&gt;</code>.</li>
+            <li><strong>Modificado entrada-3.html:</strong> Ahora enlaza al script justo antes de cerrar el <code>&lt;/body&gt;</code>, usando la etiqueta <code>&lt;script src="lightbox.js" defer&gt;&lt;/script&gt;</code>.</li>
           </ol>
 
           <h2>Demostración</h2>
