@@ -33,7 +33,7 @@
 
         <section>
           
-          <p>Ya tenemos nuestras entradas de blog como archivos HTML estáticos (<code>entrada-1.html</code>, <code>entrada-2.html</code>, esta misma) y nuestra hoja de estilos (<code>style.css</code>).</p>
+          <p>Ya tenemos nuestras entradas de blog como archivos HTML estáticos (<code>entrada-1.html</code>, <code>entrada-2.html</code>, esta misma,...), nuestra hoja de estilos (<code>style.css</code>), nuestro fichero javascript (<code>lightbox.js</code>) y la imagen elegida (<code>javascript.jpg</code> ).</p>
           <p>Ahora, el siguiente paso lógico es "servirlas" en un servidor web real. En lugar de instalar software en nuestra máquina, usaremos contenedores para empaquetar la aplicación. Vamos a crear una imagen de **Podman** que use **Fedora** e instale el servidor web **httpd** (Apache) para mostrar nuestro blog.</p>
 
           <h2>¿Qué es Podman y httpd?</h2>
@@ -59,10 +59,12 @@ FROM fedora:latest
 RUN dnf -y install httpd && dnf clean all
 
 # 3. Copiamos los archivos de nuestro blog
-#    Copiamos todos los .html y .css del directorio actual
+#    Copiamos todos los ficheros necesarios del directorio actual
 #    al directorio web por defecto de Apache
 COPY *.html /var/www/html/
 COPY *.css /var/www/html/
+COPY *.js /var/www/html/
+COPY *.jpg /var/www/html/
 
 # 4. Exponemos el puerto 80
 #    httpd escucha en el puerto 80 por defecto
