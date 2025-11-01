@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Añadiendo JavaScript: Lightbox de Imágenes</title>
+  <title>Despliegue con Podman y httpd</title>
   <link rel="stylesheet" href="style.css"> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,45 +17,97 @@
     <nav class="main-nav">
       <a href="entrada-1.html">Entrada 1: Creación con Gatsby</a>
       <a href="entrada-2.html">Entrada 2: Evolución de Estilos CSS</a>
-      <a href="entrada-3.html">Entrada 3: Despliegue mediante imagen de podman</a>
+      <a href="entrada-3.html">Entrada 3: Gestión de Imágenes (Lightbox)</a>
+
     </nav>
 
     <main>
       <article class="blog-post">
 
         <header>
-          <h1>Añadiendo JavaScript: Gestión de Imágenes (Lightbox)</h1>
-          <p>2 de noviembre de 2025</p>
+          <h1>Despliegue del Blog con Podman, Fedora y httpd</h1>
+          <p>1 de noviembre de 2025</p>
         </header>
 
         <hr>
 
         <section>
           
-          <p>Para cumplir con los requisitos de la actividad, el profesor solicitó añadir interactividad con **JavaScript**, específicamente para la gestión de imágenes.</p>
-          <p>Hemos implementado una funcionalidad clásica y elegante conocida como **"Lightbox"**. En lugar de simplemente mostrar una imagen, ahora podemos hacer clic en ella para que se amplíe y ocupe el centro de la pantalla, mientras un fondo oscuro desvanece el resto del contenido.</p>
+          <p>Ya tenemos nuestras entradas de blog como archivos HTML estáticos (<code>entrada-1.html</code>, <code>entrada-2.html</code>, esta misma) y nuestra hoja de estilos (<code>style.css</code>).</p>
+          <p>Ahora, el siguiente paso lógico es "servirlas" en un servidor web real. En lugar de instalar software en nuestra máquina, usaremos contenedores para empaquetar la aplicación. Vamos a crear una imagen de **Podman** que use **Fedora** e instale el servidor web **httpd** (Apache) para mostrar nuestro blog.</p>
 
-          <h2>¿Cómo se ha implementado?</h2>
+          <h2>¿Qué es Podman y httpd?</h2>
           <p>
-            La implementación ha requerido tocar nuestros tres tipos de archivos:
+            <ul>
+              <li><strong>Podman:</strong> Es un motor de contenedores sin demonio, una alternativa popular a Docker. Nos permite construir y ejecutar contenedores aislados.</li>
+              <li><strong>httpd:</strong> Es el nombre del software del Servidor HTTP Apache, uno de los servidores web más robustos y utilizados del mundo. Es perfecto para servir archivos estáticos como los nuestros.</li>
+            </ul>
           </p>
           
-          <ol>
-            <li><strong>`lightbox.js` (Nuevo):</strong> Se creó un nuevo archivo JavaScript. Este script espera a que la página cargue, busca todas las imágenes (`<img>`) dentro de los artículos (`.blog-post`) y les añade un "escuchador" de eventos (un <code>addEventListener</code>). Al hacer clic, el script activa el modal.</li>
-            <li><strong>`style.css` (Modificado):</strong> Añadimos nuevos estilos al final del CSS para definir el aspecto del modal (<code>#lightbox</code>). Por defecto, está oculto (<code>display: none;</code>), y el JavaScript lo hace visible (<code>display: flex;</code>) al añadir la clase <code>.visible</code>.</li>
-            <li><strong>El html entrada-3.html `.html` (Modificados):</strong> ahora enlaza al script justo antes de cerrar el <code>&lt;/body&gt;</code>, usando la etiqueta <code>&lt;script src="lightbox.js" defer&gt;&lt;/script&gt;</code>.</li>
-          </ol>
-
-          <h2>Demostración</h2>
+          <h2>1. El Fichero de Instrucciones (Dockerfile)</h2>
           <p>
-            ¡Pruébalo tú mismo! La siguiente imagen (`javascript.jpg`) ha sido detectada por nuestro script. 
+            Para construir una imagen, necesitamos un fichero de instrucciones. Por convención, se suele llamar <code>Dockerfile</code> (aunque Podman a veces prefiere <code>Containerfile</code>).
+          </p>
+          <p>Crea un archivo llamado <code>Dockerfile</code> en la misma carpeta donde tienes tus archivos <code>.html</code> y <code>.css</code>:</p>
+
+<pre><code># 1. Empezamos desde una imagen base de Fedora
+FROM fedora:latest
+
+# 2. Instalamos el servidor web Apache (httpd)
+#    Usamos 'dnf -y' para aceptar automáticamente
+#    y 'dnf clean all' para reducir el tamaño de la imagen
+RUN dnf -y install httpd && dnf clean all
+
+# 3. Copiamos los archivos de nuestro blog
+#    Copiamos todos los .html y .css del directorio actual
+#    al directorio web por defecto de Apache
+COPY *.html /var/www/html/
+COPY *.css /var/www/html/
+
+# 4. Exponemos el puerto 80
+#    httpd escucha en el puerto 80 por defecto
+EXPOSE 80
+
+# 5. El comando para arrancar el servidor
+#    Usamos '-D FOREGROUND' para que httpd se ejecute 
+#    en primer plano y mantenga el contenedor vivo.
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]</code></pre>
+
+          <h2>2. Construir la Imagen con Podman</h2>
+          <p>
+            Ahora, abre una terminal en el directorio donde tienes todos tus archivos (<code>entrada-1.html</code>, <code>style.css</code>, y el <code>Dockerfile</code>) y ejecuta el comando de construcción:
+          </p>
+
+<pre><code># 'podman build' lee el Dockerfile
+# '-t mi-blog-web' le da un nombre (tag) a nuestra imagen
+# '.' indica que el Dockerfile está en el directorio actual
+
+podman build -t mi-blog-web .</code></pre>
+
+          <p>Podman descargará la imagen de Fedora, ejecutará los comandos de instalación y copiará tus archivos dentro de la nueva imagen llamada <code>mi-blog-web</code>.</p>
+
+
+          <h2>3. Ejecutar el Contenedor</h2>
+          <p>
+            Una vez que la imagen está construida, podemos "ejecutarla" como un contenedor.
+          </p>
+
+<pre><code># 'podman run' crea un nuevo contenedor desde nuestra imagen
+# '-d' (detached): ejecuta el contenedor en segundo plano
+# '--name mi-blog': le da un nombre fácil de recordar
+# '-p 8080:80': mapea el puerto 8080 de tu máquina (host)
+#               al puerto 80 del contenedor (donde escucha httpd)
+# 'mi-blog-web': la imagen que queremos usar
+
+podman run -d --name mi-blog -p 8080:80 mi-blog-web</code></pre>
+
+          <h2>4. ¡Blog Servido!</h2>
+          <p>
+            ¡Ya está! Si todo ha ido bien, el contenedor está corriendo.
           </p>
           <p>
-            Haz clic en ella para ver el efecto Lightbox en acción. Puedes cerrarlo volviendo a hacer clic en cualquier parte del fondo oscuro.
+            Abre tu navegador web y visita <code>http://localhost:8080</code>. Deberías ver la página de inicio (que probablemente sea una de tus entradas). Si navegas a <code>http://localhost:8080/entrada-1.html</code> o <code>http://localhost:8080/entrada-3.html</code>, verás cada una de las entradas de tu blog servidas por Apache desde dentro de un contenedor Podman.
           </p>
-
-          <img src="javascript.jpg" alt="Demostración del Lightbox con logo de JavaScript" style="max-width: 400px; display: block; margin: 1.5rem auto; border: 1px solid #ddd;">
-          
 
         </section>
 
@@ -67,7 +119,5 @@
     </footer>
 
   </div> 
-  
-  <script src="lightbox.js" defer></script>
 </body>
 </html>
